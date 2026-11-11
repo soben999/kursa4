@@ -9,7 +9,7 @@ const products = [
     price: 79990,
     oldPrice: 89990,
     emoji: '📱',
-    image: 'smartphone.webp',
+    image: 'img/smartphone.webp',
     description: 'Флагманский смартфон с ярким OLED-дисплеем, мощным процессором и продвинутой камерой. Работает целый день без подзарядки и делает отличные снимки при любом освещении.',
     specs: [
       ['Дисплей', '6,1" OLED, 120 Гц'],
