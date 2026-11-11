@@ -931,6 +931,155 @@ img { max-width: 100%; display: block; }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
+/* ===== Сплэш-анимация при загрузке ===== */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash.splash--done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash__inner {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.splash__letter {
+  color: var(--blue);
+  animation: letterPop 0.9s ease forwards;
+  opacity: 0;
+}
+
+.splash__letter:nth-child(1) { animation-delay: 0.1s; }
+.splash__letter:nth-child(2) { animation-delay: 0.25s; }
+.splash__letter:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes letterPop {
+  0%   { opacity: 0; transform: translateY(30px) scale(0.5); }
+  60%  { opacity: 1; transform: translateY(-8px) scale(1.1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.splash__ring {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px solid rgba(59, 130, 246, 0.15);
+  border-top-color: var(--blue);
+  animation: ringSpin 1s linear infinite;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Приветствие ===== */
+.welcome {
+  padding: 46px 0 6px;
+}
+
+.welcome__inner {
+  text-align: center;
+}
+
+.welcome__title {
+  font-size: 30px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.welcome__sub {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* ===== Навигация-кнопки ===== */
+.navgrid {
+  padding: 24px 0 70px;
+}
+
+.navgrid__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.navcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+  padding: 28px 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.navcard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.navcard:hover {
+  transform: translateY(-6px);
+  border-color: var(--blue);
+  box-shadow: var(--shadow);
+}
+
+.navcard:hover::before {
+  transform: scaleX(1);
+}
+
+.navcard__icon {
+  font-size: 42px;
+  margin-bottom: 6px;
+  transition: transform 0.3s;
+}
+
+.navcard:hover .navcard__icon {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+.navcard__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.navcard__text {
+  font-size: 14px;
+  color: var(--muted);
+}
+
 /* ===== Адаптивность ===== */
 @media (max-width: 992px) {
   .products { grid-template-columns: repeat(3, 1fr); }
@@ -944,6 +1093,7 @@ img { max-width: 100%; display: block; }
   .header__inner { flex-wrap: wrap; }
   .search { order: 3; max-width: none; margin-left: 0; flex-basis: 100%; }
   .products { grid-template-columns: repeat(2, 1fr); }
+  .navgrid__grid { grid-template-columns: 1fr; }
   .hero__title { font-size: 34px; }
   .product__grid { grid-template-columns: 1fr; gap: 24px; }
   .product__media { height: 260px; }

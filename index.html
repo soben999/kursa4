@@ -8,10 +8,20 @@
 </head>
 <body>
 
+  <!-- Сплэш-анимация при загрузке -->
+  <div class="splash" id="splash">
+    <div class="splash__inner">
+      <span class="splash__letter" style="--i:1">H</span>
+      <span class="splash__letter" style="--i:2">N</span>
+      <span class="splash__letter" style="--i:3">S</span>
+    </div>
+    <div class="splash__ring"></div>
+  </div>
+
   <!-- Шапка -->
   <header class="header">
     <div class="container header__inner">
-      <a href="#" class="logo">H<span class="logo__dot">N</span>S</a>
+      <a href="index.html" class="logo">H<span class="logo__dot">N</span>S</a>
 
       <form class="search" id="searchForm">
         <svg class="search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -38,7 +48,7 @@
         <span class="hero__tag">Новая коллекция 2026</span>
         <h1 class="hero__title">Техника, которая<br>работает на вас</h1>
         <p class="hero__sub">Смартфоны, ноутбуки и бытовая техника по честным ценам. Доставка по всей стране.</p>
-        <a href="#catalog" class="btn btn--primary">Смотреть каталог</a>
+        <a href="catalog.html" class="btn btn--primary">Смотреть каталог</a>
       </div>
       <div class="hero__visual">
         <div class="hero__orb"></div>
@@ -47,48 +57,40 @@
     </div>
   </section>
 
-  <!-- Преимущества -->
-  <section class="benefits">
-    <div class="container benefits__grid">
-      <div class="benefit reveal">
-        <span class="benefit__icon">🚚</span>
-        <h3>Быстрая доставка</h3>
-        <p>От 1 дня по городу</p>
-      </div>
-      <div class="benefit reveal">
-        <span class="benefit__icon">🛡️</span>
-        <h3>Гарантия до 2 лет</h3>
-        <p>Официальные сервисы</p>
-      </div>
-      <div class="benefit reveal">
-        <span class="benefit__icon">💳</span>
-        <h3>Удобная оплата</h3>
-        <p>Карта, СБП, рассрочка</p>
-      </div>
-      <div class="benefit reveal">
-        <span class="benefit__icon">↩️</span>
-        <h3>Возврат 14 дней</h3>
-        <p>Без лишних вопросов</p>
-      </div>
+  <!-- Приветствие -->
+  <section class="welcome">
+    <div class="container welcome__inner reveal">
+      <h2 class="welcome__title">Что вы хотите сделать?</h2>
+      <p class="welcome__sub">Выберите раздел, чтобы продолжить</p>
     </div>
   </section>
 
-  <!-- Каталог -->
-  <section class="catalog" id="catalog">
-    <div class="container">
-      <div class="section-head">
-        <h2 class="section-title reveal">Популярные товары</h2>
-        <div class="filters" id="filters">
-          <button class="chip chip--active" data-filter="all">Все</button>
-          <button class="chip" data-filter="smartphones">Смартфоны</button>
-          <button class="chip" data-filter="laptops">Ноутбуки</button>
-          <button class="chip" data-filter="audio">Аудио</button>
-          <button class="chip" data-filter="appliances">Техника</button>
-        </div>
-      </div>
+  <!-- Навигация-кнопки -->
+  <section class="navgrid">
+    <div class="container navgrid__grid">
+      <a href="catalog.html" class="navcard navcard--catalog reveal">
+        <span class="navcard__icon">🛍️</span>
+        <span class="navcard__title">Каталог</span>
+        <span class="navcard__text">Смартфоны, ноутбуки и техника</span>
+      </a>
 
-      <div class="products" id="products"></div>
-      <p class="empty" id="empty" hidden>По вашему запросу ничего не найдено.</p>
+      <button class="navcard navcard--support reveal" data-placeholder>
+        <span class="navcard__icon">💬</span>
+        <span class="navcard__title">Поддержка</span>
+        <span class="navcard__text">Помощь и ответы на вопросы</span>
+      </button>
+
+      <button class="navcard navcard--gift reveal" data-placeholder>
+        <span class="navcard__icon">🎁</span>
+        <span class="navcard__title">Подарочные сертификаты</span>
+        <span class="navcard__text">Подарите технику близким</span>
+      </button>
+
+      <button class="navcard navcard--profile reveal" data-placeholder>
+        <span class="navcard__icon">👤</span>
+        <span class="navcard__title">Профиль</span>
+        <span class="navcard__text">Заказы, настройки и данные</span>
+      </button>
     </div>
   </section>
 

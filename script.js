@@ -1,9 +1,6 @@
 // ===== Скрипт главной страницы HNS =====
 // Данные, избранное, корзина и утилиты — в products-data.js (window.products и др.)
 
-// Кнопки избранного/корзины в карточке отмечены data-флажками, чтобы
-// клик по ним не запускал переход на страницу товара.
-
 // ===== Счётчики =====
 function updateCounters() {
   const favEl = document.getElementById('favCount');
@@ -23,101 +20,6 @@ function showToast(message) {
   toast.hidden = false;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toast.hidden = true; }, 2400);
-}
-
-// ===== Рендер карточки товара =====
-function createProductCard(product, index) {
-  const card = document.createElement('article');
-  card.className = 'product-card';
-  card.style.animationDelay = (index * 70) + 'ms';
-
-  // Клик по карточке (кроме кнопок) открывает страницу товара
-  card.style.cursor = 'pointer';
-  card.addEventListener('click', (e) => {
-    // игнорируем клики по сердцу избранного
-    if (e.target.closest('.product-card__fav')) return;
-    window.location.href = 'product.html?id=' + product.id;
-  });
-
-  const isFav = isFavorite(product.id);
-  const isInCart = inCart(product.id);
-
-  const media = document.createElement('div');
-  media.className = 'product-card__media';
-  media.innerHTML = `
-    <button class="product-card__fav ${isFav ? 'fav--active' : ''}" data-fav="${product.id}" title="В избранное">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-    </button>
-    ${product.image ? `<img src="${product.image}" alt="${product.name}" class="product-card__img">` : `<span>${product.emoji}</span>`}
-  `;
-
-  const body = document.createElement('div');
-  body.innerHTML = `
-    <div class="product-card__category">${window.categoryNames[product.category]}</div>
-    <h3 class="product-card__title">${product.name}</h3>
-    <div>
-      <span class="product-card__price">${formatPrice(product.price)}</span>
-      ${product.oldPrice ? `<span class="product-card__old">${formatPrice(product.oldPrice)}</span>` : ''}
-    </div>
-  `;
-
-  const addBtn = document.createElement('button');
-  addBtn.className = 'product-card__add' + (isInCart ? ' added' : '');
-  addBtn.textContent = isInCart ? 'Добавлено' : 'В корзину';
-
-  addBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // не открываем страницу товара
-    addToCart(product);
-    addBtn.classList.add('added');
-    addBtn.textContent = 'Добавлено';
-    updateCounters();
-    showToast('Товар добавлен в корзину ✓');
-  });
-
-  card.appendChild(media);
-  card.appendChild(body);
-  card.appendChild(addBtn);
-  return card;
-}
-
-// ===== Фильтрация и рендер =====
-let currentFilter = 'all';
-let searchQuery = '';
-
-function renderProducts() {
-  const productsEl = document.getElementById('products');
-  const emptyEl = document.getElementById('empty');
-  productsEl.innerHTML = '';
-
-  const q = searchQuery.toLowerCase().trim();
-  const filtered = window.products.filter(p => {
-    const okFilter = currentFilter === 'all' || p.category === currentFilter;
-    const okSearch = !q || p.name.toLowerCase().includes(q);
-    return okFilter && okSearch;
-  });
-
-  filtered.forEach((p, i) => {
-    productsEl.appendChild(createProductCard(p, i));
-  });
-
-  emptyEl.hidden = filtered.length > 0;
-  productsEl.hidden = filtered.length === 0;
-}
-
-// Обработчик сердца избранного в карточках (делегирование)
-function setupCardDelegation() {
-  document.getElementById('products').addEventListener('click', (e) => {
-    const favBtn = e.target.closest('[data-fav]');
-    if (!favBtn) return;
-    const id = Number(favBtn.dataset.fav);
-    toggleFavorite(id);
-    const isFav = isFavorite(id);
-    favBtn.classList.toggle('fav--active', isFav);
-    favBtn.querySelector('svg').setAttribute('fill', isFav ? 'currentColor' : 'none');
-    showToast(isFav ? 'Товар добавлен в избранное ♥' : 'Товар удалён из избранного');
-    updateCounters();
-    renderFavorites();
-  });
 }
 
 // ===== Панель избранного =====
@@ -162,7 +64,6 @@ function renderFavorites() {
       e.stopPropagation();
       toggleFavorite(Number(btn.dataset.removeFav));
       renderFavorites();
-      renderProducts();
       updateCounters();
       showToast('Товар удалён из избранного');
     });
@@ -211,7 +112,6 @@ function renderCart() {
       saveState();
       updateCounters();
       renderCart();
-      renderProducts();
       showToast('Товар удалён из корзины');
     });
   });
@@ -257,24 +157,12 @@ function setupPanels() {
   });
 }
 
-// ===== Фильтры =====
-function setupFilters() {
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
-      chip.classList.add('chip--active');
-      currentFilter = chip.dataset.filter;
-      renderProducts();
-    });
-  });
-}
-
-// ===== Поиск =====
+// ===== Поиск: перенаправляет на страницу каталога =====
 function setupSearch() {
   document.getElementById('searchForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    searchQuery = document.getElementById('searchInput').value;
-    renderProducts();
+    const q = document.getElementById('searchInput').value;
+    window.location.href = 'catalog.html?q=' + encodeURIComponent(q);
   });
 }
 
@@ -294,7 +182,9 @@ function setupReveal() {
 
 // ===== Оформление заказа =====
 function setupCheckout() {
-  document.getElementById('checkoutBtn').addEventListener('click', () => {
+  const btn = document.getElementById('checkoutBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
     if (window.cartState.length === 0) {
       showToast('Корзина пуста');
       return;
@@ -303,20 +193,41 @@ function setupCheckout() {
     saveState();
     updateCounters();
     renderCart();
-    renderProducts();
     closePanel('cartPanel');
     showToast('Заказ оформлен! Спасибо за покупку 🎉');
   });
 }
 
+// ===== Навигационные кнопки (заглушки) =====
+function setupNavcards() {
+  document.querySelectorAll('[data-placeholder]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const title = btn.querySelector('.navcard__title').textContent;
+      showToast('Раздел "' + title + '" в разработке');
+    });
+  });
+}
+
+// ===== Сплэш-анимация при загрузке =====
+function runSplash() {
+  const splash = document.getElementById('splash');
+  // Показываем сплэш ~1.5 с, затем плавно скрываем
+  setTimeout(() => {
+    splash.classList.add('splash--done');
+    // освобождаем DOM после скрытия
+    setTimeout(() => {
+      splash.remove();
+    }, 650);
+  }, 1500);
+}
+
 // ===== Инициализация =====
 updateCounters();
-setupFilters();
 setupSearch();
-setupCardDelegation();
 setupPanels();
 setupCheckout();
 setupReveal();
-renderProducts();
+setupNavcards();
 renderFavorites();
 renderCart();
+runSplash();
