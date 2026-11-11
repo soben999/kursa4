@@ -273,6 +273,43 @@ img { max-width: 100%; display: block; }
   transform: translateY(0);
 }
 
+/* ===== Плавное появление страницы при загрузке ===== */
+.header,
+.hero,
+.crumb,
+.catalog,
+.product,
+.specs,
+.welcome,
+.navgrid,
+.benefits,
+.footer {
+  animation: pageIn 0.7s ease both;
+}
+
+/* Каскадные задержки — секции появляются последовательно сверху вниз */
+.header { animation-delay: 0s; }
+.crumb { animation-delay: 0.1s; }
+.hero,
+.welcome { animation-delay: 0.1s; }
+.navgrid,
+.catalog,
+.product { animation-delay: 0.18s; }
+.benefits,
+.specs { animation-delay: 0.24s; }
+.footer { animation-delay: 0.3s; }
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ===== Преимущества ===== */
 .benefits {
   padding: 56px 0 20px;
