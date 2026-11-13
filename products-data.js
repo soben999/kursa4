@@ -29,6 +29,7 @@ const defaultProducts = [
     price: 64990,
     oldPrice: 0,
     emoji: '📲',
+    image: 'img/smartphone-nova.jpg',
     description: 'Сбалансированный смартфон с отличной камерой и чистым Android. Идеален для повседневных задач, соцсетей и съёмки.',
     specs: [
       ['Дисплей', '6,3" OLED'],
@@ -45,6 +46,7 @@ const defaultProducts = [
     price: 119990,
     oldPrice: 0,
     emoji: '💻',
+    image: 'img/laptop-airbook.jpg',
     description: 'Лёгкий ультрабук с дисплеем 2,8К и длительной автономностью. Подходит для работы, учёбы и путешествий.',
     specs: [
       ['Дисплей', '13" 2,8К'],
@@ -61,6 +63,7 @@ const defaultProducts = [
     price: 149990,
     oldPrice: 0,
     emoji: '🖥️',
+    image: 'img/laptop-probook.jpg',
     description: 'Производительный ноутбук для задач с высокой нагрузкой: программирования, монтажа и дизайна.',
     specs: [
       ['Дисплей', '16" QHD'],
@@ -77,6 +80,7 @@ const defaultProducts = [
     price: 12990,
     oldPrice: 17990,
     emoji: '🎧',
+    image: 'img/headphones-airsound.jpg',
     description: 'Беспроводные наушники с активным шумоподавлением и объёмным звуком. Держат заряд до 30 часов.',
     specs: [
       ['Тип', 'Полноразмерные'],
@@ -93,6 +97,7 @@ const defaultProducts = [
     price: 4990,
     oldPrice: 6990,
     emoji: '🔊',
+    image: 'img/speaker-miniboom.jpg',
     description: 'Портативная колонка с ярким басом и защитой от влаги. Берёте с собой куда угодно.',
     specs: [
       ['Мощность', '20 Вт'],
@@ -108,6 +113,7 @@ const defaultProducts = [
     price: 22990,
     oldPrice: 0,
     emoji: '⌚',
+    image: 'img/watch-x.jpg',
     description: 'Умные часы с отслеживанием здоровья, спортом и уведомлениями. Водозащита и две недели автономной работы.',
     specs: [
       ['Экран', 'AMOLED 1,4"'],
@@ -123,6 +129,7 @@ const defaultProducts = [
     price: 45990,
     oldPrice: 54990,
     emoji: '📺',
+    image: 'img/tv-vision.jpg',
     description: 'Телевизор 4K-разрешения с HDR и встроенным смарт-модулем. Открывает доступ к стриминговым сервисам.',
     specs: [
       ['Диагональ', '55"'],
