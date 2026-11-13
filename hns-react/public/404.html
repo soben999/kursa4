@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>HNS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SPA-fallback для GitHub Pages и статичного хостинга:
+       при любом URL (например, /catalog или /product/1) этот файл
+       отдаётся вместо 404, затем приложение React Router
+       перехватывает маршрут и отображает нужную страницу. -->
+  <script>
+    (function () {
+      // Настроить путь: index.html лежит в корне для GitHub Pages
+      var segmentCount = 1;
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/'.repeat(segmentCount) +
+        l.pathname.split('/').slice(segmentCount).join('/').replace(/&/g, '~') +
+        (l.search ? '?&' + l.search.slice(1).replace(/&/g, '~') : '') +
+        l.hash
+      );
+    })();
+  </script>
+</head>
+<body>
+  <noscript>
+    <h1>Требуется JavaScript</h1>
+    <p><a href="/">Вернуться на главную</a></p>
+  </noscript>
+</body>
+</html>
