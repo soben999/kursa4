@@ -229,8 +229,23 @@ function currentUser() {
 // Обновление интерфейса профиля в зависимости от сессии
 function renderProfile() {
   const user = currentUser();
+  const isAdmin = getSession() === window.ADMIN_LOGIN;
   const guestView = document.getElementById('guestView');
   const profileView = document.getElementById('profileView');
+
+  // Администратор: показываем карточку профиля с доступом к админ-панели
+  if (isAdmin) {
+    guestView.hidden = true;
+    profileView.hidden = false;
+    document.getElementById('profileInitials').textContent = 'A';
+    document.getElementById('profileName').textContent = 'Администратор';
+    document.getElementById('profileEmail').textContent = window.ADMIN_LOGIN;
+    document.getElementById('profileSince').textContent = 'HNS';
+    document.getElementById('profileFavCount').textContent = window.favoritesState.length;
+    document.getElementById('profileCartCount').textContent =
+      window.cartState.reduce((s, i) => s + i.quantity, 0);
+    return;
+  }
 
   if (!user) {
     guestView.hidden = false;
@@ -295,6 +310,20 @@ function setupLogin() {
     if (!pass) { showToast('Введите пароль'); document.getElementById('loginPass').focus(); return; }
 
     const user = getUsers()[login];
+
+    // Вход администратора через обычную форму
+    if (login === window.ADMIN_LOGIN) {
+      if (pass !== window.ADMIN_PASS) {
+        showToast('Неверный логин или пароль');
+        return;
+      }
+      setSession(login);
+      localStorage.setItem('hns_admin_session', '1');
+      showToast('Добро пожаловать, администратор!');
+      renderProfile();
+      return;
+    }
+
     if (!user || user.pass !== pass) {
       showToast('Неверный логин или пароль');
       return;
@@ -317,6 +346,7 @@ function setupAuthTabs() {
 function setupLogout() {
   document.getElementById('logoutBtn').addEventListener('click', () => {
     setSession(null);
+    localStorage.removeItem('hns_admin_session');
     showToast('Вы вышли из аккаунта');
     renderProfile();
     switchAuthMode('login');
