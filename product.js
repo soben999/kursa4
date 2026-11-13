@@ -273,6 +273,7 @@ function setupCheckout() {
 
 // ===== Инициализация =====
 updateCounters();
+updateAuthBtn();
 renderProduct();
 setupProductActions();
 setupPanels();

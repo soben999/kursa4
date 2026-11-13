@@ -1,7 +1,9 @@
 // ===== Общие данные каталога магазина HNS =====
 // Используются и на главной (script.js), и на странице товара (product.js)
 
-const products = [
+// Базовый (встроенный) каталог товаров. Редактируется в админ-панели;
+// изменения админа сохраняются в localStorage поверх этого списка.
+const defaultProducts = [
   {
     id: 1,
     name: 'Смартфон XPhone 15',
@@ -177,8 +179,110 @@ function inCart(productId) {
   return cart.some(i => i.id === productId);
 }
 
+// ===== Сессия пользователя (общая для всех страниц) =====
+function getSession() {
+  return localStorage.getItem('hns_session');
+}
+
+function getUsersFresh() {
+  try { return JSON.parse(localStorage.getItem('hns_users') || '{}'); }
+  catch (e) { return {}; }
+}
+
+function currentUser() {
+  const login = getSession();
+  if (!login) return null;
+  return (getUsersFresh())[String(login).toLowerCase()] || null;
+}
+
+// Обновление кнопки входа в шапке (id="authBtn"):
+// если вошёл администратор — показывает «Админ» и ведёт на админ-панель,
+// если вошёл пользователь — показывает его логин и ведёт на профиль,
+// иначе — кнопка «Войти».
+function updateAuthBtn() {
+  const btn = document.getElementById('authBtn');
+  if (!btn) return;
+
+  // Приоритет: администратор
+  if (localStorage.getItem('hns_admin_session') === '1') {
+    btn.textContent = 'Админ';
+    btn.title = 'Админ-панель';
+    btn.href = 'admin.html';
+    btn.classList.add('btn--auth-admin');
+    return;
+  }
+
+  const user = currentUser();
+  if (user) {
+    btn.textContent = user.login;
+    btn.title = 'Ваш профиль';
+    btn.href = 'profile.html';
+    btn.classList.add('btn--auth-user');
+    btn.classList.remove('btn--auth-admin');
+  } else {
+    btn.textContent = 'Войти';
+    btn.title = 'Войти';
+    btn.href = 'profile.html';
+    btn.classList.remove('btn--auth-user', 'btn--auth-admin');
+  }
+}
+
+// ============================================================
+// ===== Редактируемый каталог товаров (админ-панель) =====
+// ============================================================
+// Товары хранятся в localStorage ключом 'hns_products'. Если в хранилище
+// пусто — используется встроенный список defaultProducts. Каталог,
+// карточка товара и корзина читают товары через функции этого блока,
+// поэтому правки админа применяются сразу по всему сайту.
+
+function loadProducts() {
+  try {
+    const raw = localStorage.getItem('hns_products');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) { /* повреждённые данные — вернёмся к базовому списку */ }
+  return defaultProducts.map(p => JSON.parse(JSON.stringify(p)));
+}
+
+function saveProducts(list) {
+  localStorage.setItem('hns_products', JSON.stringify(list));
+  window.products = list;
+}
+
+function getProducts() {
+  return window.products || loadProducts();
+}
+
+// Удаляет товары с заданными id из корзины и избранного (для целостности)
+function cleanCartAndFavByIds(ids) {
+  if (cart.length) {
+    cart = cart.filter(i => !ids.includes(i.id));
+  }
+  if (favorites.length) {
+    favorites = favorites.filter(id => !ids.includes(id));
+  }
+  localStorage.setItem('hns_cart', JSON.stringify(cart));
+  localStorage.setItem('hns_favorites', JSON.stringify(favorites));
+}
+
+function fmtNumberInput(v) {
+  return parseInt(String(v).replace(/\s|₽/g, ''), 10) || 0;
+}
+
 // Экспорт для других скриптов
-window.products = products;
+window.products = loadProducts();
 window.categoryNames = categoryNames;
 window.cartState = cart;
 window.favoritesState = favorites;
+window.currentUser = currentUser;
+window.updateAuthBtn = updateAuthBtn;
+window.formatPrice = formatPrice;
+window.getProducts = getProducts;
+window.loadProducts = loadProducts;
+window.saveProducts = saveProducts;
+window.cleanCartAndFavByIds = cleanCartAndFavByIds;
+window.fmtNumberInput = fmtNumberInput;
+window.ADMIN_LOGIN = 'admin';
+window.ADMIN_PASS = 'admin123';

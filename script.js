@@ -223,6 +223,7 @@ function runSplash() {
 
 // ===== Инициализация =====
 updateCounters();
+updateAuthBtn();
 setupSearch();
 setupPanels();
 setupCheckout();

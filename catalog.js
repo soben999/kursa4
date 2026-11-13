@@ -299,6 +299,7 @@ if (searchQuery) {
   document.getElementById('searchInput').value = searchQuery;
 }
 updateCounters();
+updateAuthBtn();
 setupFilters();
 setupSearch();
 setupCardDelegation();

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель — HNS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Шапка -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo">H<span class="logo__dot">N</span>S</a>
+
+      <form class="search" id="searchForm">
+        <svg class="search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" class="search__input" id="searchInput" placeholder="Поиск: смартфоны, ноутбуки, техника...">
+      </form>
+
+      <div class="header__actions">
+        <button class="icon-btn" id="favBtn" title="Избранное">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span class="badge" id="favCount" hidden>0</span>
+        </button>
+        <button class="icon-btn icon-btn--cart" id="cartBtn" title="Корзина">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+          <span class="badge" id="cartCount" hidden>0</span>
+        </button>
+        <a href="profile.html" class="btn btn--auth" id="authBtn" title="Войти">Войти</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Экран входа администратора -->
+  <section class="admin-login" id="adminLogin">
+    <div class="container">
+      <div class="admin-login__box">
+        <span class="admin-login__icon">🛠️</span>
+        <h1 class="page-title page-title--center">Админ-панель</h1>
+        <p class="admin-login__sub">Вход для администратора магазина</p>
+        <form class="auth__form" onsubmit="return false">
+          <label class="field">
+            <span class="field__label">Логин</span>
+            <input type="text" class="field__input" id="adminLoginInput" placeholder="Логин" autocomplete="username">
+          </label>
+          <label class="field">
+            <span class="field__label">Пароль</span>
+            <input type="password" class="field__input" id="adminPassInput" placeholder="Пароль" autocomplete="current-password">
+          </label>
+          <button type="submit" class="btn btn--primary auth__submit" id="adminLoginBtn">Войти</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Панель управления товарами -->
+  <section class="admin" id="adminPanel" hidden>
+    <div class="container">
+      <div class="admin__head">
+        <div>
+          <h1 class="page-title">Управление товарами</h1>
+          <p class="admin__sub">Добавление, редактирование и удаление товаров каталога.</p>
+        </div>
+        <button class="btn btn--ghost" id="adminLogout">Выйти</button>
+      </div>
+
+      <!-- Кнопки действий -->
+      <div class="admin__actions">
+        <button class="btn btn--primary" id="adminAddBtn">+ Добавить товар</button>
+        <button class="btn btn--ghost" id="adminResetBtn">Сбросить каталог</button>
+      </div>
+
+      <!-- Форма добавления/редактирования товара -->
+      <form class="admin-form" id="adminForm" onsubmit="return false" hidden>
+        <h2 class="admin-form__title" id="adminFormTitle">Добавление товара</h2>
+        <input type="hidden" id="pId">
+        <div class="admin-form__grid">
+          <label class="field">
+            <span class="field__label">Название *</span>
+            <input type="text" class="field__input" id="pName" placeholder="Название товара">
+          </label>
+          <label class="field">
+            <span class="field__label">Категория</span>
+            <select class="field__input" id="pCategory">
+              <option value="smartphones">Смартфоны</option>
+              <option value="laptops">Ноутбуки</option>
+              <option value="audio">Аудио</option>
+              <option value="appliances">Техника</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Цена *</span>
+            <input type="text" class="field__input" id="pPrice" placeholder="Например: 49990">
+          </label>
+          <label class="field">
+            <span class="field__label">Старая цена (необязательно)</span>
+            <input type="text" class="field__input" id="pOldPrice" placeholder="Например: 59990">
+          </label>
+          <label class="field">
+            <span class="field__label">Эмодзи-иконка</span>
+            <input type="text" class="field__input" id="pEmoji" placeholder="Например: 📱">
+          </label>
+          <label class="field">
+            <span class="field__label">Путь к картинке (необязательно)</span>
+            <input type="text" class="field__input" id="pImage" placeholder="img/nazvanie.webp">
+          </label>
+          <label class="field field--full">
+            <span class="field__label">Описание *</span>
+            <textarea class="field__input field__input--area" id="pDescription" placeholder="Описание товара"></textarea>
+          </label>
+        </div>
+        <div class="admin-form__actions">
+          <button type="submit" class="btn btn--primary" id="pSave">Сохранить</button>
+          <button type="button" class="btn btn--ghost" id="pCancel">Отмена</button>
+        </div>
+      </form>
+
+      <!-- Таблица товаров -->
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Товар</th>
+              <th>Категория</th>
+              <th>Цена</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="adminEmpty" hidden>В каталоге пока нет товаров. Добавьте первый.</p>
+    </div>
+  </section>
+
+  <!-- Панели -->
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="panel" id="favoritesPanel" aria-hidden="true">
+    <div class="panel__head">
+      <h3>Избранное</h3>
+      <button class="panel__close" data-close="favoritesPanel">×</button>
+    </div>
+    <div class="panel__body" id="favoritesList"></div>
+  </aside>
+
+  <aside class="panel" id="cartPanel" aria-hidden="true">
+    <div class="panel__head">
+      <h3>Корзина</h3>
+      <button class="panel__close" data-close="cartPanel">×</button>
+    </div>
+    <div class="panel__body" id="cartList"></div>
+    <div class="panel__foot">
+      <div class="panel__total">Итого: <strong id="cartTotal">0 ₽</strong></div>
+      <button class="btn btn--primary panel__checkout" id="checkoutBtn">Оформить заказ</button>
+    </div>
+  </aside>
+
+  <!-- Подвал -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <a href="index.html" class="logo">H<span class="logo__dot">N</span>S</a>
+        <p class="footer__note">© 2026 HNS. Все права защищены.</p>
+      </div>
+      <ul class="footer__links">
+        <li><a href="#">Доставка и оплата</a></li>
+        <li><a href="#">Гарантия</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Уведомление -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="products-data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
