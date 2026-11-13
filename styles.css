@@ -1500,16 +1500,22 @@ img { max-width: 100%; display: block; }
   font-family: inherit;
   font-size: 15px;
   outline: none;
-  transition: border-color 0.25s, background 0.25s;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+.field__input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.field__input:hover {
+  border-color: rgba(59, 130, 246, 0.45);
 }
 
 .field__input:focus {
   border-color: var(--blue);
   background: var(--surface);
-}
-
-.field__input::placeholder {
-  color: var(--muted);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
 }
 
 .field__input--area {
@@ -1632,12 +1638,25 @@ img { max-width: 100%; display: block; }
 }
 
 .auth__box {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   max-width: 440px;
-  background: var(--surface);
+  background: linear-gradient(160deg, var(--surface) 0%, var(--dark) 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.auth__box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
 }
 
 .auth__tabs {
@@ -1671,6 +1690,7 @@ img { max-width: 100%; display: block; }
   font-size: 22px;
   color: var(--white);
   margin-bottom: 18px;
+  letter-spacing: 0.2px;
 }
 
 .auth__form {
