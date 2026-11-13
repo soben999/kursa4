@@ -1,13 +1,145 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hns-react</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HNS — интернет-магазин электроники</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Сплэш-анимация при загрузке -->
+  <div class="splash" id="splash">
+    <div class="splash__inner">
+      <span class="splash__letter" style="--i:1">H</span>
+      <span class="splash__letter" style="--i:2">N</span>
+      <span class="splash__letter" style="--i:3">S</span>
+    </div>
+    <div class="splash__ring"></div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo">H<span class="logo__dot">N</span>S</a>
+
+      <form class="search" id="searchForm">
+        <svg class="search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" class="search__input" id="searchInput" placeholder="Поиск: смартфоны, ноутбуки, техника...">
+      </form>
+
+      <div class="header__actions">
+        <button class="icon-btn" id="favBtn" title="Избранное">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span class="badge" id="favCount" hidden>0</span>
+        </button>
+        <button class="icon-btn icon-btn--cart" id="cartBtn" title="Корзина">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+          <span class="badge" id="cartCount" hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Промо -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__text reveal">
+        <span class="hero__tag">Новая коллекция 2026</span>
+        <h1 class="hero__title">Техника, которая<br>работает на вас</h1>
+        <p class="hero__sub">Смартфоны, ноутбуки и бытовая техника по честным ценам. Доставка по всей стране.</p>
+        <a href="catalog.html" class="btn btn--primary">Смотреть каталог</a>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__orb"></div>
+        <span class="hero__emoji">💻</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Приветствие -->
+  <section class="welcome">
+    <div class="container welcome__inner reveal">
+      <h2 class="welcome__title">Что вы хотите сделать?</h2>
+      <p class="welcome__sub">Выберите раздел, чтобы продолжить</p>
+    </div>
+  </section>
+
+  <!-- Навигация-кнопки -->
+  <section class="navgrid">
+    <div class="container navgrid__grid">
+      <a href="catalog.html" class="navcard navcard--catalog reveal">
+        <span class="navcard__icon">🛍️</span>
+        <span class="navcard__title">Каталог</span>
+        <span class="navcard__text">Смартфоны, ноутбуки и техника</span>
+        <span class="navcard__arrow">→</span>
+      </a>
+
+      <button class="navcard navcard--support reveal" data-placeholder>
+        <span class="navcard__icon">💬</span>
+        <span class="navcard__title">Поддержка</span>
+        <span class="navcard__text">Помощь и ответы на вопросы</span>
+        <span class="navcard__arrow">→</span>
+      </button>
+
+      <button class="navcard navcard--gift reveal" data-placeholder>
+        <span class="navcard__icon">🎁</span>
+        <span class="navcard__title">Подарочные сертификаты</span>
+        <span class="navcard__text">Подарите технику близким</span>
+        <span class="navcard__arrow">→</span>
+      </button>
+
+      <button class="navcard navcard--profile reveal" data-placeholder>
+        <span class="navcard__icon">👤</span>
+        <span class="navcard__title">Профиль</span>
+        <span class="navcard__text">Заказы, настройки и данные</span>
+        <span class="navcard__arrow">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Панели избранного и корзины -->
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="panel" id="favoritesPanel" aria-hidden="true">
+    <div class="panel__head">
+      <h3>Избранное</h3>
+      <button class="panel__close" data-close="favoritesPanel">×</button>
+    </div>
+    <div class="panel__body" id="favoritesList"></div>
+  </aside>
+
+  <aside class="panel" id="cartPanel" aria-hidden="true">
+    <div class="panel__head">
+      <h3>Корзина</h3>
+      <button class="panel__close" data-close="cartPanel">×</button>
+    </div>
+    <div class="panel__body" id="cartList"></div>
+    <div class="panel__foot">
+      <div class="panel__total">Итого: <strong id="cartTotal">0 ₽</strong></div>
+      <button class="btn btn--primary panel__checkout" id="checkoutBtn">Оформить заказ</button>
+    </div>
+  </aside>
+
+  <!-- Подвал -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <a href="#" class="logo">H<span class="logo__dot">N</span>S</a>
+        <p class="footer__note">© 2026 HNS. Все права защищены.</p>
+      </div>
+      <ul class="footer__links">
+        <li><a href="#">Доставка и оплата</a></li>
+        <li><a href="#">Гарантия</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Уведомление -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="products-data.js"></script>
+  <script src="script.js"></script>
+</body>
 </html>
